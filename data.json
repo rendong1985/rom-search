@@ -1,18 +1,27 @@
 [
     {
-        "model": "移动魔百和 CM101S-2",
-        "chip": "海思 Hi3798",
-        "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件，TTL线刷必备",
+        "model": "魔百和 CM201-2",
+        "chip": "晶晨 S905L",
+        "desc": "移动版，完美去广告，自带 Root",
         "links": [
-            { "name": "夸克网盘 (极速下载)", "url": "https://pan.quark.cn/s/xxxxxx", "type": "quark" }
+            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/xxxxxx" },
+            { "name": "百度网盘", "url": "https://pan.baidu.com/s/xxxxxx" }
         ]
     },
     {
         "model": "天猫魔盒 M13",
         "chip": "晶晨 S905",
-        "desc": "去升级，精简纯净版",
+        "desc": "支持全网通，精简系统",
         "links": [
-            { "name": "百度网盘", "url": "https://pan.baidu.com/s/yyyyyy", "type": "baidu" }
+            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/yyyyyy" }
+        ]
+    },
+    {
+        "model": "外贸盒子 通用版",
+        "chip": "瑞芯微 RK3328",
+        "desc": "原生安卓9.0，支持 Google Play",
+        "links": [
+            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/zzzzzz" }
         ]
     }
 ]
