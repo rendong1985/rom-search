@@ -20,10 +20,19 @@
             <p class="text-gray-500">输入型号，搜索你的专属救砖包</p>
         </header>
 
-        <!-- 搜索框 -->
-        <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-200">
-            <input type="text" id="keyword" class="flex-1 px-4 py-2 outline-none text-gray-700" placeholder="例如：CM101S-2">
-            <button onclick="doSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">搜索</button>
+        <!-- 修改区域：品牌筛选与搜索框 -->
+        <div class="flex flex-col gap-3 mb-6">
+            <select id="brandFilter" onchange="doSearch()" class="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none text-gray-700 bg-white shadow-sm">
+                <option value="">📂 所有品牌 (全部)</option>
+                <option value="魔百和">魔百和</option>
+                <option value="天猫魔盒">天猫魔盒</option>
+                <option value="外贸盒子">外贸盒子</option>
+                <option value="其他">其他</option>
+            </select>
+            <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-200">
+                <input type="text" id="keyword" class="flex-1 px-4 py-2 outline-none text-gray-700" placeholder="输入型号关键词...">
+                <button onclick="doSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">搜索</button>
+            </div>
         </div>
 
         <div id="results" class="mt-6"></div>
@@ -40,17 +49,23 @@
 
         function doSearch() {
             const keyword = document.getElementById('keyword').value.toLowerCase();
+            const brand = document.getElementById('brandFilter').value; // 获取品牌筛选值
             const resultsDiv = document.getElementById('results');
             
-            if (!keyword) return alert('请输入机型！');
             resultsDiv.innerHTML = '<div class="flex justify-center mt-10"><div class="loading-spinner"></div></div>';
 
-            setTimeout(() => { // 加个小延迟让动画更自然
-                const found = romDatabase.filter(item => item.model.toLowerCase().includes(keyword));
+            setTimeout(() => {
+                // 筛选逻辑：同时匹配品牌(brand)和关键词(keyword)
+                const found = romDatabase.filter(item => {
+                    const matchBrand = brand === "" || item.model.includes(brand);
+                    const matchKeyword = item.model.toLowerCase().includes(keyword);
+                    return matchBrand && matchKeyword;
+                });
+
                 resultsDiv.innerHTML = '';
 
                 if (found.length === 0) {
-                    resultsDiv.innerHTML = '<p class="text-center text-gray-400 mt-10">抱歉，没找到该型号的资源</p>';
+                    resultsDiv.innerHTML = '<p class="text-center text-gray-400 mt-10">抱歉，没找到符合条件的资源</p>';
                     return;
                 }
 
