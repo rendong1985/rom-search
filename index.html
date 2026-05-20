@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>刷机包搜索中心</title>
-    <!-- 引入 Tailwind CSS 极速美化 -->
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .result-card:hover { transform: translateY(-3px); transition: 0.3s; }
@@ -17,20 +17,16 @@
     <div class="max-w-2xl mx-auto">
         <header class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">📦 机顶盒刷机包中心</h1>
-            <p class="text-gray-500">输入型号，搜索你的专属救砖包</p>
+            <p class="text-gray-500">自动提取数据，实时筛选你的专属救砖包</p>
         </header>
 
-        <!-- 修改区域：品牌筛选与搜索框 -->
+        <!-- 筛选与搜索框 -->
         <div class="flex flex-col gap-3 mb-6">
             <select id="brandFilter" onchange="doSearch()" class="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none text-gray-700 bg-white shadow-sm">
                 <option value="">📂 所有品牌 (全部)</option>
-                <option value="魔百和">魔百和</option>
-                <option value="天猫魔盒">天猫魔盒</option>
-                <option value="外贸盒子">外贸盒子</option>
-                <option value="其他">其他</option>
             </select>
             <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-200">
-                <input type="text" id="keyword" class="flex-1 px-4 py-2 outline-none text-gray-700" placeholder="输入型号关键词...">
+                <input type="text" id="keyword" class="flex-1 px-4 py-2 outline-none text-gray-700" placeholder="输入型号关键词 (例如: CM201)...">
                 <button onclick="doSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">搜索</button>
             </div>
         </div>
@@ -41,23 +37,41 @@
     <script>
         let romDatabase = [];
 
-        // 加载数据
+        // 1. 加载数据
         fetch('data.json?t=' + new Date().getTime())
             .then(res => res.json())
-            .then(data => romDatabase = data)
-            .catch(() => document.getElementById('results').innerHTML = '<p class="text-center text-red-500">数据加载失败，请检查文件位置</p>');
+            .then(data => {
+                romDatabase = data;
+                initBrandFilter(); // 自动生成品牌列表
+                doSearch();        // 初始化显示
+            })
+            .catch(() => document.getElementById('results').innerHTML = '<p class="text-center text-red-500">数据加载失败，请检查 data.json</p>');
 
+        // 2. 自动提取品牌 (自动处理品牌名)
+        function initBrandFilter() {
+            const brandSelect = document.getElementById('brandFilter');
+            // 获取所有 model 的第一个词作为品牌，并去重
+            const brands = [...new Set(romDatabase.map(item => item.model.split(" ")[0]))];
+            
+            brands.forEach(brand => {
+                const option = document.createElement("option");
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        }
+
+        // 3. 核心搜索筛选逻辑
         function doSearch() {
             const keyword = document.getElementById('keyword').value.toLowerCase();
-            const brand = document.getElementById('brandFilter').value; // 获取品牌筛选值
+            const brand = document.getElementById('brandFilter').value;
             const resultsDiv = document.getElementById('results');
             
             resultsDiv.innerHTML = '<div class="flex justify-center mt-10"><div class="loading-spinner"></div></div>';
 
             setTimeout(() => {
-                // 筛选逻辑：同时匹配品牌(brand)和关键词(keyword)
                 const found = romDatabase.filter(item => {
-                    const matchBrand = brand === "" || item.model.includes(brand);
+                    const matchBrand = brand === "" || item.model.startsWith(brand);
                     const matchKeyword = item.model.toLowerCase().includes(keyword);
                     return matchBrand && matchKeyword;
                 });
