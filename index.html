@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!-- ... 这里的 head 和 样式 css 完全保持以前的写法，省略 ... -->
+<body>
+    <h1>📦 找盒子刷机包</h1>
+    <div class="search-box">
+        <input type="text" id="keyword" placeholder="输入机型，例如: CM101">
+        <button onclick="doSearch()">搜索</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        // 1. 先准备一个空篮子，用来装等会儿搬回来的数据
+        let romDatabase = [];
+
+        // 2. 派 fetch 小哥去拿数据
+        fetch('data.json')
+            .then(response => {
+                // 小哥把文件拿回来了，我们告诉他：“把这个文件翻译成 JavaScript 能看懂的格式”
+                return response.json(); 
+            })
+            .then(data => {
+                // 翻译完成！把数据倒进我们的空篮子里
+                romDatabase = data;
+                // 在输入框提示一下用户
+                document.getElementById('keyword').placeholder = "数据加载完毕，请输入机型...";
+            })
+            .catch(error => {
+                // 万一小哥迷路了或者文件找不到，这里会报错
+                console.error("加载数据失败了:", error);
+                document.getElementById('keyword').placeholder = "数据加载失败！";
+            });
+
+        // 3. 搜索功能完全不变！
+        function doSearch() {
+            const keyword = document.getElementById('keyword').value.toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; 
+
+            if (!keyword) return alert('请输入机型！');
+
+            // 如果用户手太快，数据还没搬回来就点了搜索
+            if (romDatabase.length === 0) {
+                return alert('数据还在努力加载中，请稍等一秒钟~');
+            }
+
+            const foundRoms = romDatabase.filter(item => item.model.toLowerCase().includes(keyword));
+
+            if (foundRoms.length === 0) {
+                resultsDiv.innerHTML = '<p>没有找到该机型的刷机包，请检查型号是否正确。</p>';
+                return;
+            }
+
+            foundRoms.forEach(rom => {
+                let linksHtml = '';
+                rom.links.forEach(link => {
+                    linksHtml += `<a href="${link.url}" target="_blank" class="${link.type}">${link.name}</a>`;
+                });
+
+                resultsDiv.innerHTML += `
+                    <div class="result-card">
+                        <h3>${rom.model} <small>(${rom.chip})</small></h3>
+                        <p>${rom.desc}</p>
+                        <div class="links">${linksHtml}</div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
