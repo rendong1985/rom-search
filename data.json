@@ -33,5 +33,38 @@
                 "url": "https://pan.baidu.com/s/yyyyyy"
             }
         ]
+    },
+    {
+        "model": "移动魔百和 CM101S-2",
+        "chip": "海思 Hi3798",
+        "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件",
+        "links": [
+            {
+                "name": "官方原版",
+                "url": "https://pan.quark.cn/s/xxxxxx"
+            }
+        ]
+    },
+    {
+        "model": "九联 UNT401H",
+        "chip": "晶晨 S905L",
+        "desc": "纯净版安卓系统，支持蓝牙语音，已开启 ROOT",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/yyyyyy"
+            }
+        ]
+    },
+    {
+        "model": "中兴 B860AV2.1",
+        "chip": "晶晨 S905L",
+        "desc": "4K全网通救砖包，刷机需双公头 USB 线",
+        "links": [
+            {
+                "name": "蓝奏云",
+                "url": "https://wwx.lanzn.com/zzzzzz"
+            }
+        ]
     }
 ]
