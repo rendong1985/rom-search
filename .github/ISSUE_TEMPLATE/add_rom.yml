@@ -1,26 +1,33 @@
 name: 添加新刷机包
-description: 在此填入机顶盒信息
+description: 支持单条或批量添加资源
 title: "新资源: "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 💡 填写说明
+        - **单条添加**：填写下方的四个输入框即可。
+        - **批量添加**：在最下方的“批量列表”中按格式填写，每行一条。
   - type: input
     id: model
     attributes:
-      label: "机型名称 (如: 魔百和 CM201-2)"
-      placeholder: "请输入品牌+空格+型号"
-    validations:
-      required: true
+      label: 机型名称
   - type: input
     id: chip
     attributes:
-      label: "芯片型号 (如: 晶晨 S905L)"
-    validations:
-      required: true
+      label: 芯片型号
   - type: textarea
     id: desc
     attributes:
-      label: "描述信息"
+      label: 描述信息
   - type: textarea
     id: link1
     attributes:
-      label: "资源链接 (名字,链接)"
-      placeholder: "格式: 夸克网盘,https://pan.quark.cn/..."
+      label: 资源链接
+  - type: textarea
+    id: batch
+    attributes:
+      label: 批量添加列表
+      placeholder: |
+        格式：机型 | 芯片 | 描述 | 链接名字,链接地址
+        例子：魔百和CM201 | 晶晨S905L | 某某精简版 | 夸克,https://...
