@@ -11,12 +11,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Update JSON
-        shell: bash
+      - name: Create Update Script
         run: |
-          python3 -c '
+          cat << 'EOF' > update_script.py
           import json, re, os
-          body = """${{ github.event.issue.body }}"""
+          
+          # GitHub 传入的环境变量比直接在字符串中插入更安全
+          body = os.environ.get("ISSUE_BODY", "")
           
           def get_section(title):
               pattern = rf"### {title}\n\n(.*?)(?=\n\n###|$)"
@@ -46,8 +47,13 @@ jobs:
               f.seek(0)
               json.dump(data, f, ensure_ascii=False, indent=4)
               f.truncate()
-          '
-          
+          EOF
+
+      - name: Run Update Script
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python3 update_script.py
+
       - name: Commit & Push
         run: |
           git config user.name "github-actions[bot]"
