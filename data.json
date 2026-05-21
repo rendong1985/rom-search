@@ -4,8 +4,14 @@
         "chip": "晶晨 S905L",
         "desc": "移动版，完美去广告，自带 Root",
         "links": [
-            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/xxxxxx" },
-            { "name": "百度网盘", "url": "https://pan.baidu.com/s/xxxxxx" }
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/xxxxxx"
+            },
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/xxxxxx"
+            }
         ]
     },
     {
@@ -13,7 +19,10 @@
         "chip": "晶晨 S905",
         "desc": "支持全网通，精简系统",
         "links": [
-            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/yyyyyy" }
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/yyyyyy"
+            }
         ]
     },
     {
@@ -21,7 +30,21 @@
         "chip": "瑞芯微 RK3328",
         "desc": "原生安卓9.0，支持 Google Play",
         "links": [
-            { "name": "夸克网盘", "url": "https://pan.quark.cn/s/zzzzzz" }
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/zzzzzz"
+            }
+        ]
+    },
+    {
+        "model": "",
+        "chip": "",
+        "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件，TTL线刷必备",
+        "links": [
+            {
+                "name": "资源下载",
+                "url": ""
+            }
         ]
     }
 ]
