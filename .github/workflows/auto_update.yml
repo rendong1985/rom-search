@@ -11,24 +11,23 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Run Update Script
-        shell: bash
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           python3 -c "
           import json, re, os
           body = os.environ.get('ISSUE_BODY', '')
-          
           def get_section(title):
               pattern = rf'### {title}\n\n(.*?)(?=\n\n###|$)'
               match = re.search(pattern, body, re.DOTALL)
               return match.group(1).strip() if match else ''
 
           new_entries = []
-
-          # 1. 处理单条数据
+          # 1. 处理单条
           s_model = get_section('机型名称')
           if s_model and s_model != '_No response_':
               link_raw = get_section('资源链接')
@@ -40,32 +39,26 @@ jobs:
                   'links': [{'name': name.strip(), 'url': url.strip()}]
               })
 
-          # 2. 处理批量数据
+          # 2. 处理批量
           batch_text = get_section('批量添加列表')
           if batch_text and batch_text != '_No response_':
-              lines = batch_text.split('\n')
-              for line in lines:
+              for line in batch_text.split('\n'):
                   if '|' in line:
                       parts = [p.strip() for p in line.split('|')]
                       if len(parts) >= 4:
                           b_name, b_url = parts[3].split(',', 1) if ',' in parts[3] else ('资源下载', parts[3])
                           new_entries.append({
-                              'model': parts[0],
-                              'chip': parts[1],
-                              'desc': parts[2],
+                              'model': parts[0], 'chip': parts[1], 'desc': parts[2],
                               'links': [{'name': b_name.strip(), 'url': b_url.strip()}]
                           })
 
-          if not new_entries:
-              print('没有发现有效数据')
-              exit(0)
+          if not new_entries: exit(0)
 
-          # 3. 写入文件
           data = []
           if os.path.exists('data.json'):
               with open('data.json', 'r', encoding='utf-8') as f:
                   try: data = json.load(f)
-                  except: pass
+                  except: data = []
           
           data.extend(new_entries)
           with open('data.json', 'w', encoding='utf-8') as f:
@@ -76,22 +69,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json
-          git commit -m "Add multiple ROMs via Issue" || echo "No changes"
-          git push- name: Commit & Push
-        run: |
-          # 1. 设置身份
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 2. 核心：先拉取远程最新更改，防止 OOS (Out of Sync)
           git pull origin main --rebase
-          
-          # 3. 添加文件
           git add data.json
-          
-          # 4. 提交（加上容错，如果没有变化也不报错）
-          git commit -m "自动更新资源: ${{ github.event.issue.title }}" || echo "No changes to commit"
-          
-          # 5. 推送
+          git commit -m "自动更新资源: ${{ github.event.issue.title }}" || echo "No changes"
           git push origin main
