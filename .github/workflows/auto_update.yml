@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run Python Script
+      - name: Run Update Script
         shell: bash
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
@@ -22,36 +22,52 @@ jobs:
           body = os.environ.get('ISSUE_BODY', '')
           
           def get_section(title):
-              match = re.search(rf'### {title}\n\n(.*?)(?=\n\n###|$)', body, re.DOTALL)
+              pattern = rf'### {title}\n\n(.*?)(?=\n\n###|$)'
+              match = re.search(pattern, body, re.DOTALL)
               return match.group(1).strip() if match else ''
-              
-          model = get_section('机型名称')
-          chip = get_section('芯片型号')
-          desc = get_section('描述信息')
-          link_raw = get_section('资源链接')
-          
-          if ',' in link_raw:
-              name, url = link_raw.split(',', 1)
-          else:
-              name, url = '资源下载', link_raw
-              
-          new_entry = {
-              'model': model,
-              'chip': chip,
-              'desc': desc,
-              'links': [{'name': name.strip(), 'url': url.strip()}]
-          }
-          
+
+          new_entries = []
+
+          # 1. 处理单条数据
+          s_model = get_section('机型名称')
+          if s_model and s_model != '_No response_':
+              link_raw = get_section('资源链接')
+              name, url = link_raw.split(',', 1) if ',' in link_raw else ('资源下载', link_raw)
+              new_entries.append({
+                  'model': s_model,
+                  'chip': get_section('芯片型号'),
+                  'desc': get_section('描述信息'),
+                  'links': [{'name': name.strip(), 'url': url.strip()}]
+              })
+
+          # 2. 处理批量数据
+          batch_text = get_section('批量添加列表')
+          if batch_text and batch_text != '_No response_':
+              lines = batch_text.split('\n')
+              for line in lines:
+                  if '|' in line:
+                      parts = [p.strip() for p in line.split('|')]
+                      if len(parts) >= 4:
+                          b_name, b_url = parts[3].split(',', 1) if ',' in parts[3] else ('资源下载', parts[3])
+                          new_entries.append({
+                              'model': parts[0],
+                              'chip': parts[1],
+                              'desc': parts[2],
+                              'links': [{'name': b_name.strip(), 'url': b_url.strip()}]
+                          })
+
+          if not new_entries:
+              print('没有发现有效数据')
+              exit(0)
+
+          # 3. 写入文件
           data = []
           if os.path.exists('data.json'):
               with open('data.json', 'r', encoding='utf-8') as f:
-                  try:
-                      data = json.load(f)
-                  except:
-                      pass
-                      
-          data.append(new_entry)
+                  try: data = json.load(f)
+                  except: pass
           
+          data.extend(new_entries)
           with open('data.json', 'w', encoding='utf-8') as f:
               json.dump(data, f, ensure_ascii=False, indent=4)
           "
@@ -61,5 +77,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git commit -m "Add new ROM via Issue" || echo "No changes to commit"
+          git commit -m "Add multiple ROMs via Issue" || echo "No changes"
           git push
