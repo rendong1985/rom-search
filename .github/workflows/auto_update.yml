@@ -11,11 +11,19 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Run Update Script
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
-        run: python3 update.py
+        run: |
+          python3 -c "import json, re, os; body = os.environ.get('ISSUE_BODY', ''); \
+          def get_section(title): \
+              match = re.search(rf'### {title}\n\n(.*?)(?=\n\n###|$)', body, re.DOTALL); \
+              return match.group(1).strip() if match else ''; \
+          new_entry = {'model': get_section('机型名称'), 'chip': get_section('芯片型号'), 'desc': get_section('描述信息'), 'links': [{'name': '资源下载', 'url': get_section('资源链接')}]}; \
+          data = json.load(open('data.json', 'r', encoding='utf-8')) if os.path.exists('data.json') else []; \
+          data.append(new_entry); \
+          json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)"
 
       - name: Commit & Push
         run: |
