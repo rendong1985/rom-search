@@ -37,13 +37,13 @@
         ]
     },
     {
-        "model": "",
-        "chip": "",
+        "model": "魔百合CM101S-2",
+        "chip": "晶晨 S905",
         "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件，TTL线刷必备",
         "links": [
             {
                 "name": "资源下载",
-                "url": ""
+                "url": "https://pan.quark.cn/s/zzzzzz"
             }
         ]
     }
