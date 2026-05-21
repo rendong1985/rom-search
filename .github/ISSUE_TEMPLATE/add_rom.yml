@@ -5,22 +5,22 @@ body:
   - type: input
     id: model
     attributes:
-      label: 机型名称 (如: 魔百和 CM201-2)
-      placeholder: 请输入品牌+空格+型号
+      label: "机型名称 (如: 魔百和 CM201-2)"
+      placeholder: "请输入品牌+空格+型号"
     validations:
       required: true
   - type: input
     id: chip
     attributes:
-      label: 芯片型号 (如: 晶晨 S905L)
+      label: "芯片型号 (如: 晶晨 S905L)"
     validations:
       required: true
   - type: textarea
     id: desc
     attributes:
-      label: 描述信息
+      label: "描述信息"
   - type: textarea
     id: link1
     attributes:
-      label: 资源链接 (名字,链接)
-      placeholder: 格式: 夸克网盘,https://pan.quark.cn/...
+      label: "资源链接 (名字,链接)"
+      placeholder: "格式: 夸克网盘,https://pan.quark.cn/..."
