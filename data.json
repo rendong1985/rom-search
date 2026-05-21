@@ -1,35 +1,18 @@
 [
     {
-        "model": "魔百合 11s-2",
-        "chip": "S9876",
-        "desc": "测试专用",
-        "links": [
-            {
-                "name": "夸克网盘",
-                "url": "https://pan.quark.cn/s/xxxxxx"
-            }
-        ]
-    },
-    {
         "model": "移动魔百和 CM101S-2",
         "chip": "海思 Hi3798",
-        "desc": "救砖专用包，包含 HiTool",
+        "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件，TTL线刷必备",
         "links": [
-            {
-                "name": "夸克网盘",
-                "url": "https://pan.quark.cn/s/xxxxxx"
-            }
+            { "name": "夸克网盘 (极速下载)", "url": "https://pan.quark.cn/s/xxxxxx", "type": "quark" }
         ]
     },
     {
-        "model": "天猫魔百和 CM101S-2",
-        "chip": "海思 Hi3798",
-        "desc": "救砖专用包，包含 HiTool",
+        "model": "天猫魔盒 M13",
+        "chip": "晶晨 S905",
+        "desc": "去升级，精简纯净版",
         "links": [
-            {
-                "name": "夸克网盘",
-                "url": "https://pan.quark.cn/s/xxxxxx"
-            }
+            { "name": "百度网盘", "url": "https://pan.baidu.com/s/yyyyyy", "type": "baidu" }
         ]
-    },
+    }
 ]
