@@ -18,16 +18,25 @@ jobs:
           # 获取 issue 内容
           body = """${{ github.event.issue.body }}"""
           
-          # 正则提取表单值 (简化逻辑)
+          # 正则提取表单值 (匹配 Issue 表单的 Markdown 格式)
           def get_val(key):
-              match = re.search(f"{key}:\\s*(.*)", body)
+              # 匹配 "标签: 值" 的格式
+              pattern = rf"{key}.*?\n\n(.*?)(?=\n\n|$)"
+              match = re.search(pattern, body, re.DOTALL)
               return match.group(1).strip() if match else ""
+
+          # 提取数据
+          link_raw = get_val("资源链接")
+          if ',' in link_raw:
+              name, url = link_raw.split(',', 1)
+          else:
+              name, url = "资源下载", link_raw
 
           new_entry = {
               "model": get_val("机型名称"),
               "chip": get_val("芯片型号"),
               "desc": get_val("描述信息"),
-              "links": [{"name": get_val("资源链接").split(',')[0], "url": get_val("资源链接").split(',')[1]}]
+              "links": [{"name": name.strip(), "url": url.strip()}]
           }
           
           # 读取并追加到 data.json
@@ -36,6 +45,7 @@ jobs:
               data.append(new_entry)
               f.seek(0)
               json.dump(data, f, ensure_ascii=False, indent=4)
+              f.truncate()
           
       - name: Commit & Push
         run: |
