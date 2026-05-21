@@ -11,48 +11,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Create Update Script
-        run: |
-          cat << 'EOF' > update_script.py
-          import json, re, os
-          
-          # GitHub 传入的环境变量比直接在字符串中插入更安全
-          body = os.environ.get("ISSUE_BODY", "")
-          
-          def get_section(title):
-              pattern = rf"### {title}\n\n(.*?)(?=\n\n###|$)"
-              match = re.search(pattern, body, re.DOTALL)
-              return match.group(1).strip() if match else ""
-
-          model = get_section("机型名称")
-          chip = get_section("芯片型号")
-          desc = get_section("描述信息")
-          link_raw = get_section("资源链接")
-
-          if "," in link_raw:
-              name, url = link_raw.split(",", 1)
-          else:
-              name, url = "资源下载", link_raw
-
-          new_entry = {
-              "model": model,
-              "chip": chip,
-              "desc": desc,
-              "links": [{"name": name.strip(), "url": url.strip()}]
-          }
-          
-          with open("data.json", "r+", encoding="utf-8") as f:
-              data = json.load(f)
-              data.append(new_entry)
-              f.seek(0)
-              json.dump(data, f, ensure_ascii=False, indent=4)
-              f.truncate()
-          EOF
-
+      
       - name: Run Update Script
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
-        run: python3 update_script.py
+        run: python3 update.py
 
       - name: Commit & Push
         run: |
