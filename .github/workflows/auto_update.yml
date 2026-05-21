@@ -12,28 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Update JSON
-        shell: python3
+        shell: bash
         run: |
-          import json, re
-          # 获取 issue 内容
+          python3 -c '
+          import json, re, os
           body = """${{ github.event.issue.body }}"""
           
-          # 定义解析函数
           def get_section(title):
-              # 匹配 ### 标题 下方的所有内容
               pattern = rf"### {title}\n\n(.*?)(?=\n\n###|$)"
               match = re.search(pattern, body, re.DOTALL)
               return match.group(1).strip() if match else ""
 
-          # 提取数据
           model = get_section("机型名称")
           chip = get_section("芯片型号")
           desc = get_section("描述信息")
           link_raw = get_section("资源链接")
 
-          # 链接处理
-          if ',' in link_raw:
-              name, url = link_raw.split(',', 1)
+          if "," in link_raw:
+              name, url = link_raw.split(",", 1)
           else:
               name, url = "资源下载", link_raw
 
@@ -44,13 +40,13 @@ jobs:
               "links": [{"name": name.strip(), "url": url.strip()}]
           }
           
-          # 写入文件
-          with open('data.json', 'r+', encoding='utf-8') as f:
+          with open("data.json", "r+", encoding="utf-8") as f:
               data = json.load(f)
               data.append(new_entry)
               f.seek(0)
               json.dump(data, f, ensure_ascii=False, indent=4)
               f.truncate()
+          '
           
       - name: Commit & Push
         run: |
