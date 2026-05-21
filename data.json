@@ -9,5 +9,16 @@
                 "url": "https://pan.quark.cn/s/xxxxxx"
             }
         ]
+    },
+    {
+        "model": "移动魔百和 CM101S-2",
+        "chip": "海思 Hi3798",
+        "desc": "救砖专用包，包含 HiTool",
+        "links": [
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/xxxxxx"
+            }
+        ]
     }
 ]
