@@ -1,0 +1,46 @@
+name: Auto Update JSON
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-data:
+    if: contains(github.event.issue.title, '新资源:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update JSON
+        shell: python
+        run: |
+          import json, os, re
+          # 获取 issue 内容
+          body = """${{ github.event.issue.body }}"""
+          
+          # 正则提取表单值 (简化逻辑)
+          def get_val(key):
+              match = re.search(f"{key}:\\s*(.*)", body)
+              return match.group(1).strip() if match else ""
+
+          new_entry = {
+              "model": get_val("机型名称"),
+              "chip": get_val("芯片型号"),
+              "desc": get_val("描述信息"),
+              "links": [{"name": get_val("资源链接").split(',')[0], "url": get_val("资源链接").split(',')[1]}]
+          }
+          
+          # 读取并追加到 data.json
+          with open('data.json', 'r+', encoding='utf-8') as f:
+              data = json.load(f)
+              data.append(new_entry)
+              f.seek(0)
+              json.dump(data, f, ensure_ascii=False, indent=4)
+          
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Add new ROM via Issue"
+          git push
