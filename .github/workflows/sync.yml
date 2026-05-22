@@ -1,0 +1,32 @@
+name: 表格数据自动同步
+
+on:
+  push:
+    branches:
+      - main  # 当你有代码变动时触发
+  schedule:
+    - cron: '0 */6 * * *'  # 每 6 小时在后台自动悄悄跑一次
+  workflow_dispatch:      # 允许你在后台手动点按钮立刻刷新
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 拉取最新代码
+      uses: actions/checkout@v4
+
+    - name: 初始化 Python 环境
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: 运行同步脚本
+      run: python update_data.py
+
+    - name: 提交更新到仓库
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add data.json
+        git commit -m "🤖 自动同步：在线表格资源更新" || exit 0
+        git push
