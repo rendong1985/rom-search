@@ -1,1 +1,19 @@
-[]
+[
+    {
+        "model": "创维 E900V22D",
+        "chip": "S905L3B",
+        "desc": "安卓9.0-原生设置-刷机工具打双勾-线刷固件包",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/123",
+                "pwd": "kczk"
+            },
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/456",
+                "pwd": ""
+            }
+        ]
+    }
+]
