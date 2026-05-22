@@ -5,9 +5,7 @@ import io
 import re
 
 # 【用你自己的谷歌表格 CSV 链接替换这里】
-EXCEL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIvrt1znX5OZRt_W9r4bVXlsSZrXtr_d-wuPOH2ggH8Ncp74up9lInFOPzWRiA0qG6WF71yppDrbE/pub?gid=0&single=true&output=csv
-"
-
+EXCEL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIvrt1znX5OZRt_W9r4bVXlsSZrXtr_d-wuPOH2ggH8Ncp74up9lInFOPzWRiA0qG6WF71yppDrbE/pub?gid=0&single=true&output=csv"
 def parse_link_item(raw_item):
     if ',' not in raw_item:
         return None
