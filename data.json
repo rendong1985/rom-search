@@ -1,12 +1,17 @@
 [
     {
-        "model": "移动魔百和 CM101S-2",
-        "chip": "海思 Hi3798",
-        "desc": "救砖专用包，包含 HiTool 烧录工具和 XML 分区表文件，TTL线刷必备",
+        "model": "创维 E900V22D",
+        "chip": "S905L3B",
+        "desc": "安卓9.0-原生设置-刷机工具打双勾-线刷固件包",
         "links": [
             {
-                "name": "夸克网盘 (极速下载)",
-                "url": "https://pan.quark.cn/s/xxxxxx",
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/1-jQ1_ZVKctmqu5ym3Bg5nw?pwd=kczk",
+                "type": "baidu"
+            }
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/4e5aff75846a",
                 "type": "quark"
             }
         ]
