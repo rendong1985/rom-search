@@ -6,20 +6,48 @@
         "links": [
             {
                 "name": "百度网盘",
-                "url": "https://pan.baidu.com/s/123",
-                "pwd": "kczk"
+                "url": "https://pan.baidu.com/s/1ENPoy-zrTyQ7h6JSxrkvFA?pwd=qycn",
+                "pwd": "qycn"
             },
             {
                 "name": "夸克网盘",
-                "url": "https://pan.quark.cn/s/456",
+                "url": "https://pan.quark.cn/s/eac3d868dc6c",
                 "pwd": ""
             }
         ]
     },
     {
-        "model": "魔百和",
-        "chip": "CM201",
-        "desc": "原生固件",
-        "links": []
+        "model": "魔百和CM311-1",
+        "chip": "晶辰S905L3",
+        "desc": "此固件开机LOGO和动画为SMARTTV，很漂亮！启动迅速，系统流畅。",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/16JGnqsZh3H_jZFDnnpF10A?pwd=7kja",
+                "pwd": "7kja"
+            },
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/544a86947a86",
+                "pwd": ""
+            }
+        ]
+    },
+    {
+        "model": "创维E900V21E",
+        "chip": "晶晨S905L、海思HI3798MV310",
+        "desc": "针对创维E900V21E机顶盒提供深度定制的刷机解决方案",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/16JGnqsZh3H_jZFDnnpF10A?pwd=7kja",
+                "pwd": "7kja"
+            },
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/35138b152786",
+                "pwd": ""
+            }
+        ]
     }
 ]
