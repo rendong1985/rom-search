@@ -24,16 +24,16 @@
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shrink-0 text-lg">
-                    ✉️
+                    💬
                 </span>
                 <div>
                     <h4 class="text-sm font-bold text-blue-900">商务合作 & 资源投稿</h4>
-                    <p class="text-xs text-blue-700 mt-0.5">链接失效？有更好用的固件分享？欢迎随时联系站长QQ573807363反馈。</p>
+                    <p class="text-xs text-blue-700 mt-0.5">链接失效？有更好用的固件分享？欢迎添加站长微信反馈。</p>
                 </div>
             </div>
-            <a href="mailto:573807363#qq.com" class="w-full sm:w-auto text-center shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition active:scale-95">
-                立即联系
-            </a>
+            <button onclick="toggleWeChatModal(true)" class="w-full sm:w-auto text-center shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition active:scale-95">
+                添加站长微信
+            </button>
         </div>
 
         <div class="flex flex-col gap-3 mb-6">
@@ -50,12 +50,39 @@
         <div id="results" class="mt-6"></div>
     </div>
 
+    <div id="wechatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="toggleWeChatModal(false)">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-xl animate-fade-in" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900">👥 关联站长微信</h3>
+                <button onclick="toggleWeChatModal(false)" class="text-gray-400 hover:text-gray-600 text-xl font-medium">×</button>
+            </div>
+            
+            <div class="bg-gray-100 rounded-2xl p-4 mb-4 flex items-center justify-center aspect-square max-w-[200px] mx-auto border border-gray-100">
+                <img src="wechat-qrcode.png" alt="微信二维码" class="w-full h-full object-contain rounded-xl fallback-img" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=96kj.eu.org_StationMaster'">
+            </div>
+            
+            <p class="text-sm text-gray-600 font-medium">微信号: <span class="bg-gray-100 px-2 py-0.5 rounded text-blue-600 font-mono select-all">dongdong2027</span></p>
+            <p class="text-xs text-gray-400 mt-2">长按识别二维码，或复制微信号添加好友<br>(请备注: 96kj刷机网)</p>
+        </div>
+    </div>
+
     <script>
         let romDatabase = [];
 
         /**
+         * 微信弹窗显示/隐藏控制
+         */
+        function toggleWeChatModal(show) {
+            const modal = document.getElementById('wechatModal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        /**
          * 1. 加载数据 
-         * 通过在 URL 后添加 ?t=时间戳，强制浏览器跳过缓存获取最新 data.json
          */
         function loadData() {
             const resultsDiv = document.getElementById('results');
@@ -87,7 +114,6 @@
          */
         function initBrandFilter() {
             const brandSelect = document.getElementById('brandFilter');
-            // 提取每个 model 的第一个词作为品牌
             const brands = [...new Set(romDatabase.map(item => item.model.trim().split(/\s+|[-|]/)[0]))]
                             .filter(b => b && b.length > 0);
             
@@ -107,7 +133,6 @@
             const brand = document.getElementById('brandFilter').value;
             const resultsDiv = document.getElementById('results');
             
-            // 筛选匹配项
             const found = romDatabase.filter(item => {
                 const matchBrand = brand === "" || item.model.includes(brand);
                 const matchKeyword = item.model.toLowerCase().includes(keyword) || 
@@ -116,7 +141,6 @@
                 return matchBrand && matchKeyword;
             });
 
-            // 如果没有结果
             if (found.length === 0) {
                 resultsDiv.innerHTML = `
                     <div class="text-center py-20">
@@ -126,7 +150,6 @@
                 return;
             }
 
-            // 渲染列表
             resultsDiv.innerHTML = found.map(rom => {
                 const linksHtml = rom.links.map(l => `
                     <a href="${l.url}" target="_blank" 
@@ -153,7 +176,6 @@
             }).join('');
         }
 
-        // 启动加载
         loadData();
     </script>
 </body>
