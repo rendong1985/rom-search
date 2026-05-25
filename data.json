@@ -40,13 +40,42 @@
         "links": [
             {
                 "name": "百度网盘",
-                "url": "https://pan.baidu.com/s/16JGnqsZh3H_jZFDnnpF10A?pwd=7kja",
-                "pwd": "7kja"
+                "url": "https://pan.baidu.com/s/1pjxtNdDwAo-_q8W0mTyLbQ?pwd=ebn6",
+                "pwd": "ebn6"
             },
             {
                 "name": "夸克网盘",
                 "url": "https://pan.quark.cn/s/35138b152786",
                 "pwd": ""
+            }
+        ]
+    },
+    {
+        "model": "外贸盒子HK1_BOX",
+        "chip": "S905X3",
+        "desc": "本固件更新包括HK1 BOX 1000M千兆版和100M百兆版设备！固件基于slimbox",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/19Z0aiBmMwYspnDfw90qT1g?pwd=m5vi",
+                "pwd": "m5vi"
+            },
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/35138b152787",
+                "pwd": ""
+            }
+        ]
+    },
+    {
+        "model": "外贸盒子(HK1/H96/X96等)",
+        "chip": "瑞芯微RK3318",
+        "desc": "包含晶晨S905L，S905L3，S905L3A，S905X，S905X3，S905X4，瑞芯微RK3528，瑞芯微RK3566等热门主控和型号的固件",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/1EGmflZyrvRKH5CxY2FaxmQ?pwd=p7hf",
+                "pwd": "p7hf"
             }
         ]
     }
