@@ -9,8 +9,10 @@
         .result-card:hover { transform: translateY(-3px); transition: 0.3s; }
         .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 平滑滚动 */
+        /* 平滑滚动与展开动画 */
         html { scroll-behavior: smooth; }
+        .tools-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .tools-content.open { max-height: 500px; transition: max-height 0.5s ease-in; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen p-4 md:p-8">
@@ -21,7 +23,7 @@
             <p class="text-gray-500">自动提取数据，实时筛选你的专属救砖包</p>
         </header>
 
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shrink-0 text-lg">
                     💬
@@ -34,6 +36,42 @@
             <button onclick="toggleWeChatModal(true)" class="w-full sm:w-auto text-center shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition active:scale-95">
                 添加站长微信
             </button>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm mb-6 overflow-hidden">
+            <button onclick="toggleToolsArea()" class="w-full flex items-center justify-between p-4 bg-gray-50/50 hover:bg-gray-50 transition-all outline-none">
+                <div class="flex items-center gap-2 text-sm font-bold text-gray-700">
+                    <span>🛠️ 常用刷机工具箱 & 避坑指南</span>
+                </div>
+                <span id="toolsArrow" class="text-gray-400 text-xs transition-transform duration-300">▼ 展开</span>
+            </button>
+            
+            <div id="toolsContent" class="tools-content border-t border-gray-100 bg-white">
+                <div class="p-4 space-y-4 text-sm">
+                    <div>
+                        <h5 class="font-bold text-gray-800 mb-2 flex items-center gap-1">🔗 官方标准线刷工具下载：</h5>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <a href="#" target="_blank" class="flex items-center justify-between p-2.5 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 text-gray-700 hover:text-blue-600 transition group">
+                                <span class="font-medium text-xs">晶晨线刷工具 USB_Burning_Tool</span>
+                                <span class="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-600 group-hover:text-white transition">下载</span>
+                            </a>
+                            <a href="#" target="_blank" class="flex items-center justify-between p-2.5 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 text-gray-700 hover:text-blue-600 transition group">
+                                <span class="font-medium text-xs">海思调试烧录工具 HiTool</span>
+                                <span class="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-600 group-hover:text-white transition">下载</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-amber-50/60 border border-amber-100 rounded-xl p-3 text-amber-900 text-xs leading-relaxed">
+                        <span class="font-bold text-amber-900 block mb-1">⚠️ 站长独家刷机防砖戒律：</span>
+                        <ul class="list-disc pl-4 space-y-1 text-amber-800">
+                            <li><strong class="text-amber-950">核对版本</strong>：千万不要盲目相信网上的“一包通刷”，刷机前务必拆机看清主板芯片型号。</li>
+                            <li><strong class="text-amber-950">线刷注意</strong>：使用晶晨工具线刷时，建议勾选“擦除flash”，但非必要切勿盲目勾选“擦除bootloader”。</li>
+                            <li><strong class="text-amber-950">供电稳固</strong>：台式机线刷请务必将数据线插在主板后置的 USB 2.0 接口上（通常为黑色接口），防止供电不足导致断连烧录失败。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-col gap-3 mb-6">
@@ -61,7 +99,7 @@
             <div class="bg-gray-100 rounded-2xl p-4 mb-4 flex items-center justify-center aspect-square max-w-[200px] mx-auto border border-gray-100">
                 <img src="wechat-qrcode.png" alt="微信二维码" class="w-full h-full object-contain rounded-xl" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=96kj.eu.org_StationMaster'">
             </div>
-            <p class="text-sm text-gray-600 font-medium">微信号: <span class="bg-gray-100 px-2 py-0.5 rounded text-blue-600 font-mono select-all">dongdong2027</span></p>
+            <p class="text-sm text-gray-600 font-medium">微信号: <span class="bg-gray-100 px-2 py-0.5 rounded text-blue-600 font-mono select-all">请替换为你的微信号</span></p>
             <p class="text-xs text-gray-400 mt-2">长按识别二维码，或复制微信号添加好友<br>(请备注: 96kj刷机网)</p>
         </div>
     </div>
@@ -72,11 +110,26 @@
         
         // 分页核心配置
         let currentPage = 1;   // 当前页码
-        const itemsPerPage = 10; // 【每页显示条数，你可以改成 15 或 20】
+        const itemsPerPage = 10; // 每页显示条数
 
         function toggleWeChatModal(show) {
             const modal = document.getElementById('wechatModal');
             modal.classList.toggle('hidden', !show);
+        }
+
+        /**
+         * 新功能：控制工具箱区域折叠与展开
+         */
+        function toggleToolsArea() {
+            const content = document.getElementById('toolsContent');
+            const arrow = document.getElementById('toolsArrow');
+            
+            content.classList.toggle('open');
+            if (content.classList.contains('open')) {
+                arrow.textContent = "▲ 收起";
+            } else {
+                arrow.textContent = "▼ 展开";
+            }
         }
 
         /**
@@ -94,7 +147,7 @@
                 .then(data => {
                     romDatabase = data;
                     initBrandFilter();
-                    resetSearch(); // 初始执行搜索筛选
+                    resetSearch(); 
                 })
                 .catch(err => {
                     console.error('加载失败:', err);
@@ -123,18 +176,12 @@
             });
         }
 
-        /**
-         * 当输入框或筛选改变时，重置页码并重新筛选
-         */
         function resetSearch() {
-            currentPage = 1; // 只要搜索或换品牌，立刻回到第一页
+            currentPage = 1; 
             executeFilter();
             renderPage();
         }
 
-        /**
-         * 3. 核心筛选逻辑 (把筛选和渲染拆分开，方便分页)
-         */
         function executeFilter() {
             const keyword = document.getElementById('keyword').value.toLowerCase().trim();
             const brand = document.getElementById('brandFilter').value;
@@ -148,9 +195,6 @@
             });
         }
 
-        /**
-         * 4. 渲染指定页码的数据和分页条
-         */
         function renderPage() {
             const resultsDiv = document.getElementById('results');
             const paginationDiv = document.getElementById('pagination');
@@ -161,17 +205,15 @@
                         <p class="text-gray-400 text-lg">没有找到相关资源</p>
                         <p class="text-gray-300 text-sm mt-2">试试更换关键词或品牌</p>
                     </div>`;
-                paginationDiv.innerHTML = ""; // 隐藏分页条
+                paginationDiv.innerHTML = ""; 
                 return;
             }
 
-            // 计算分页切片位置
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const pageData = filteredData.slice(startIndex, endIndex);
 
-            // 渲染当前的 10 条卡片
             resultsDiv.innerHTML = pageData.map(rom => {
                 const linksHtml = rom.links.map(l => `
                     <a href="${l.url}" target="_blank" 
@@ -197,7 +239,6 @@
                 `;
             }).join('');
 
-            // 🛠️ 渲染分页按钮控制条
             let paginationHtml = "";
             
             // 上一页
@@ -230,21 +271,15 @@
             paginationDiv.innerHTML = paginationHtml;
         }
 
-        /**
-         * 5. 切换页码函数
-         */
         function changePage(page) {
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
             if (page < 1 || page > totalPages) return;
             
             currentPage = page;
             renderPage();
-            
-            // 完美体验：换页后让网页自动平滑滚动回顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 启动加载
         loadData();
     </script>
 </body>
