@@ -37,48 +37,46 @@
         </div>
 
         <div class="flex flex-col gap-3 mb-6">
-            <select id="brandFilter" onchange="doSearch()" class="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none text-gray-700 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 transition-all">
+            <select id="brandFilter" onchange="resetSearch()" class="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none text-gray-700 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 transition-all">
                 <option value="">📂 所有品牌 (全部)</option>
             </select>
             
             <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                <input type="text" id="keyword" oninput="doSearch()" class="flex-1 px-4 py-2 outline-none text-gray-700 bg-transparent" placeholder="输入型号关键词 (例如: CM201)...">
-                <button onclick="doSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition shadow-md active:scale-95">搜索</button>
+                <input type="text" id="keyword" oninput="resetSearch()" class="flex-1 px-4 py-2 outline-none text-gray-700 bg-transparent" placeholder="输入型号关键词 (例如: CM201)...">
+                <button onclick="resetSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition shadow-md active:scale-95">搜索</button>
             </div>
         </div>
 
         <div id="results" class="mt-6"></div>
+
+        <div id="pagination" class="flex items-center justify-center gap-1 mt-8 mb-12"></div>
     </div>
 
     <div id="wechatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="toggleWeChatModal(false)">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-xl animate-fade-in" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-xl" onclick="event.stopPropagation()">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-gray-900">👥 关联站长微信</h3>
                 <button onclick="toggleWeChatModal(false)" class="text-gray-400 hover:text-gray-600 text-xl font-medium">×</button>
             </div>
-            
             <div class="bg-gray-100 rounded-2xl p-4 mb-4 flex items-center justify-center aspect-square max-w-[200px] mx-auto border border-gray-100">
-                <img src="wechat-qrcode.png" alt="微信二维码" class="w-full h-full object-contain rounded-xl fallback-img" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=96kj.eu.org_StationMaster'">
+                <img src="wechat-qrcode.png" alt="微信二维码" class="w-full h-full object-contain rounded-xl" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=96kj.eu.org_StationMaster'">
             </div>
-            
             <p class="text-sm text-gray-600 font-medium">微信号: <span class="bg-gray-100 px-2 py-0.5 rounded text-blue-600 font-mono select-all">dongdong2027</span></p>
             <p class="text-xs text-gray-400 mt-2">长按识别二维码，或复制微信号添加好友<br>(请备注: 96kj刷机网)</p>
         </div>
     </div>
 
     <script>
-        let romDatabase = [];
+        let romDatabase = []; // 原始总数据
+        let filteredData = []; // 筛选过后的数据
+        
+        // 分页核心配置
+        let currentPage = 1;   // 当前页码
+        const itemsPerPage = 10; // 【每页显示条数，你可以改成 15 或 20】
 
-        /**
-         * 微信弹窗显示/隐藏控制
-         */
         function toggleWeChatModal(show) {
             const modal = document.getElementById('wechatModal');
-            if (show) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
+            modal.classList.toggle('hidden', !show);
         }
 
         /**
@@ -96,7 +94,7 @@
                 .then(data => {
                     romDatabase = data;
                     initBrandFilter();
-                    doSearch();
+                    resetSearch(); // 初始执行搜索筛选
                 })
                 .catch(err => {
                     console.error('加载失败:', err);
@@ -126,31 +124,55 @@
         }
 
         /**
-         * 3. 核心搜索与筛选逻辑
+         * 当输入框或筛选改变时，重置页码并重新筛选
          */
-        function doSearch() {
+        function resetSearch() {
+            currentPage = 1; // 只要搜索或换品牌，立刻回到第一页
+            executeFilter();
+            renderPage();
+        }
+
+        /**
+         * 3. 核心筛选逻辑 (把筛选和渲染拆分开，方便分页)
+         */
+        function executeFilter() {
             const keyword = document.getElementById('keyword').value.toLowerCase().trim();
             const brand = document.getElementById('brandFilter').value;
-            const resultsDiv = document.getElementById('results');
             
-            const found = romDatabase.filter(item => {
+            filteredData = romDatabase.filter(item => {
                 const matchBrand = brand === "" || item.model.includes(brand);
                 const matchKeyword = item.model.toLowerCase().includes(keyword) || 
                                    item.chip.toLowerCase().includes(keyword) || 
                                    item.desc.toLowerCase().includes(keyword);
                 return matchBrand && matchKeyword;
             });
+        }
 
-            if (found.length === 0) {
+        /**
+         * 4. 渲染指定页码的数据和分页条
+         */
+        function renderPage() {
+            const resultsDiv = document.getElementById('results');
+            const paginationDiv = document.getElementById('pagination');
+            
+            if (filteredData.length === 0) {
                 resultsDiv.innerHTML = `
                     <div class="text-center py-20">
                         <p class="text-gray-400 text-lg">没有找到相关资源</p>
                         <p class="text-gray-300 text-sm mt-2">试试更换关键词或品牌</p>
                     </div>`;
+                paginationDiv.innerHTML = ""; // 隐藏分页条
                 return;
             }
 
-            resultsDiv.innerHTML = found.map(rom => {
+            // 计算分页切片位置
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            // 渲染当前的 10 条卡片
+            resultsDiv.innerHTML = pageData.map(rom => {
                 const linksHtml = rom.links.map(l => `
                     <a href="${l.url}" target="_blank" 
                        class="px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white border border-blue-100 transition-all flex items-center gap-1">
@@ -174,8 +196,55 @@
                     </div>
                 `;
             }).join('');
+
+            // 🛠️ 渲染分页按钮控制条
+            let paginationHtml = "";
+            
+            // 上一页
+            paginationHtml += `
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} 
+                        class="px-3 py-2 rounded-xl text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition">
+                    ◀
+                </button>
+            `;
+
+            // 页码数字
+            for (let i = 1; i <= totalPages; i++) {
+                const isCurrent = i === currentPage;
+                paginationHtml += `
+                    <button onclick="changePage(${i})" 
+                            class="w-10 h-10 rounded-xl text-sm font-bold border transition ${isCurrent ? 'bg-blue-600 border-blue-600 text-white shadow-sm shadow-blue-200' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            // 下一页
+            paginationHtml += `
+                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} 
+                        class="px-3 py-2 rounded-xl text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition">
+                    ▶
+                </button>
+            `;
+
+            paginationDiv.innerHTML = paginationHtml;
         }
 
+        /**
+         * 5. 切换页码函数
+         */
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            renderPage();
+            
+            // 完美体验：换页后让网页自动平滑滚动回顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 启动加载
         loadData();
     </script>
 </body>
