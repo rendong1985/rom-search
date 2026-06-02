@@ -78,5 +78,53 @@
                 "pwd": "p7hf"
             }
         ]
+    },
+    {
+        "model": "魔百和CM系列",
+        "chip": "晶晨S905L",
+        "desc": "最新更新S905L",
+        "links": [
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/daa7df8b7708",
+                "pwd": ""
+            }
+        ]
+    },
+    {
+        "model": "天邑(TY)固件合集",
+        "chip": "S905",
+        "desc": "2026最新",
+        "links": [
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/41b63e2a6d38",
+                "pwd": ""
+            }
+        ]
+    },
+    {
+        "model": "CM311- 开头全部型号固件合集",
+        "chip": "MGV3200／3201",
+        "desc": "CM311系列型号刷机包包括-5 ZG代工卡刷，CM311-5s／5S／CM321-5／5S／",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/1h5Ih2C1egEjR1TZ9Wn8dJA?pwd=f24g",
+                "pwd": "f24g"
+            }
+        ]
+    },
+    {
+        "model": "魔百盒 CM201-2（朝歌ZG版）",
+        "chip": "Hi3798MV300",
+        "desc": "主要适用于海思 Hi3798MV300 芯片、M8273 主板（分为 NAND 和 EMMC 两种闪存类型）的设备。",
+        "links": [
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/0579e184d3a6",
+                "pwd": ""
+            }
+        ]
     }
 ]
