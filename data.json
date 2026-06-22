@@ -126,5 +126,22 @@
                 "pwd": ""
             }
         ]
+    },
+    {
+        "model": "创维E900V20D",
+        "chip": "国科GK6323V100C",
+        "desc": "安卓9.0_U盘卡刷刷机固件包",
+        "links": [
+            {
+                "name": "百度网盘",
+                "url": "https://pan.baidu.com/s/1iTcrP9x-_tYyh8uQhKZwqg?pwd=47fu",
+                "pwd": "47fu"
+            },
+            {
+                "name": "夸克网盘",
+                "url": "https://pan.quark.cn/s/e59ed17357cd",
+                "pwd": ""
+            }
+        ]
     }
 ]
